@@ -8,12 +8,14 @@ model = None
 def load_model():
     global model, tokenizer
     if model is None or tokenizer is None:
-        model_path = "Qwen/Qwen3-1.7B"
+        model_path = "kakaocorp/kanana-1.5-2.1b-base"
         tokenizer = AutoTokenizer.from_pretrained(model_path)
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
             torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-            device_map=torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+            device_map="cpu",  
+            # device_map=torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"),
+            
         )
         device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
         model.to(device)
